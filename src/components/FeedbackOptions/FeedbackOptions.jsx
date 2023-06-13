@@ -6,7 +6,13 @@ function FeedbackOptions({ options, onLeaveFeedback }) {
     <List>
       {options.map((option, index) => {
         return (
-          <Button type="button" key={index} onClick={onLeaveFeedback}>
+          <Button
+            type="button"
+            key={index}
+            onClick={() => {
+              onLeaveFeedback(option);
+            }}
+          >
             {option}
           </Button>
         );
