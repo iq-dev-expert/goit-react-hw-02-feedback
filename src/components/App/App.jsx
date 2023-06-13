@@ -1,8 +1,8 @@
 import { Component } from 'react';
-import FeedbackOptions from './FeedbackOptions';
-import Statistics from './Statistics';
-import Section from './Section';
-import Notification from './Notification';
+import FeedbackOptions from '../FeedbackOptions/FeedbackOptions';
+import Statistics from '../Statistics/Statistics';
+import Section from '../Section/Section';
+import Notification from '../Notification/Notification';
 import { Container } from './App.styled';
 
 class App extends Component {
@@ -12,19 +12,17 @@ class App extends Component {
     bad: 0,
   };
 
-  onButtonClick = e => {
-    const key = e.target.childNodes[0].data;
+  onButtonClick = option => {
     this.setState(prevState => {
-      return { [key]: prevState[key] + 1 };
+      return { [option]: prevState[option] + 1 };
     });
   };
 
   countTotalFeedback() {
-    const { state } = this;
-
     let total = 0;
-    for (const st in state) {
-      total += state[st];
+
+    for (const st in this.state) {
+      total += this.state[st];
     }
     return total;
   }
@@ -37,29 +35,27 @@ class App extends Component {
   }
 
   render() {
-    const {
-      state,
-      state: { good, neutral, bad },
-    } = this;
+    const { good, neutral, bad } = this.state;
+    const total = this.countTotalFeedback();
 
     return (
       <Container>
         <Section title="Please leave feedback">
           <FeedbackOptions
-            options={Object.keys(state)}
+            options={Object.keys(this.state)}
             onLeaveFeedback={this.onButtonClick}
           />
         </Section>
 
         <Section title="Statistics">
-          {!this.countTotalFeedback() ? (
+          {!total ? (
             <Notification message="There is no feedback" />
           ) : (
             <Statistics
               good={good}
               neutral={neutral}
               bad={bad}
-              total={this.countTotalFeedback()}
+              total={total}
               positivePercentage={this.countPositiveFeedbackPercentage()}
             />
           )}
